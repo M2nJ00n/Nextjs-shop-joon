@@ -3,6 +3,7 @@
 import { Gaitwise } from '@/public/svg'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 
 export default function SignUp() {
@@ -10,6 +11,9 @@ export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('analyst')
+
+  // Inside your component
+  const router = useRouter()
 
   const handleSignUp = async () => {
     const res = await fetch('/api/signup', {
@@ -21,9 +25,10 @@ export default function SignUp() {
     })
 
     if (res.ok) {
-      alert('アカウント作成成功')
+      alert('회원가입이 완료되었습니다!')
+      router.push('/auth?type=login')
     } else {
-      alert('アカウント作成失敗')
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.')
     }
   }
 

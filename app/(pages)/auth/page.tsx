@@ -6,7 +6,8 @@ import SignUp from './Signup'
 import ForgetPassword from './ForgetPass'
 import { Gaitwise } from '@/public/svg'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 function AuthContent() {
   const searchParams = useSearchParams() // URLのクエリパラメータを取得
@@ -16,19 +17,22 @@ function AuthContent() {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('analyst')
 
+  // Inside AuthContent:
+  const router = useRouter()
+
   const handleLogin = async () => {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, role }),
+    const res = await signIn('credentials', {
+      redirect: false,
+      username,
+      password,
+      role,
     })
 
-    if (res.ok) {
-      alert('ログイン成功')
+    if (res?.ok) {
+      alert('로그인 성공!')
+      router.push('/')
     } else {
-      alert('ログイン失敗')
+      alert('로그인 실패: 이메일이나 비밀번호를 확인해주세요.')
     }
   }
 

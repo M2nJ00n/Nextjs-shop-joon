@@ -1,67 +1,17 @@
 import React from 'react'
+import dbConnect from '@/db/dbConnect'
+import Product from '@/db/models/Product'
 
-// --- 더미 데이터 영역 ---
-const discoveryData = [
-  { id: 1, brand: 'PHILIPS', desc: '손목부담없는 다림질' },
-  { id: 2, brand: '파워에이드', desc: '월드컵 패키지 경품' },
-  { id: 3, brand: "Kellogg's", desc: '더 커진 레드베리바' },
-  { id: 4, brand: '하림 펫푸드', desc: '신선한 강아지 간식' },
-  { id: 5, brand: "AGE 20's", desc: '촉촉한 에센스 팩트' },
-  { id: 6, brand: '건강백서', desc: '건강백서 브랜드위크' },
-  { id: 7, brand: '비트', desc: '캡슐세제 특가' },
-  { id: 8, brand: '힐스사이언스', desc: '다이어트 사료' },
-]
+export default async function Home() {
+  await dbConnect()
+  
+  // Fetch products from database
+  const allProducts = await Product.find({}).lean()
+  
+  // Separate into categories for display
+  const discoveryData = allProducts.filter((p: any) => p.category === '발견')
+  const specialDealsData = allProducts.filter((p: any) => p.category === '특가')
 
-const specialDealsData = [
-  {
-    id: 1,
-    badge: '무료배송',
-    title: '유기농 국내산 달콤한 햇 밤고구마 3kg, 1박스',
-    price: '11,500',
-    discount: '15,000',
-    rating: '★★★★★',
-    reviews: '1,204',
-  },
-  {
-    id: 2,
-    badge: '특가',
-    title: '충남 아산 신선한 국내산 양배추 1통, 당일수확',
-    price: '8,900',
-    discount: '11,000',
-    rating: '★★★★☆',
-    reviews: '85',
-  },
-  {
-    id: 3,
-    badge: '로켓직구',
-    title: '프리미엄 무선 진동 마사지건 6단계 조절',
-    price: '32,000',
-    discount: '45,000',
-    rating: '★★★★★',
-    reviews: '3,412',
-  },
-  {
-    id: 4,
-    badge: '무료배송',
-    title: '캠핑용 초강력 LED 후레쉬 랜턴 충전식',
-    price: '18,700',
-    discount: '25,000',
-    rating: '★★★★☆',
-    reviews: '512',
-  },
-  {
-    id: 5,
-    badge: '무료배송',
-    title: '여성용 가을 겨울 루즈핏 브이넥 니트 가디건',
-    price: '27,500',
-    discount: '',
-    rating: '★★★★★',
-    reviews: '104',
-  },
-]
-// ----------------------
-
-export default function Home() {
   return (
     <div className="container">
       {/* 상단 바 */}
@@ -110,8 +60,8 @@ export default function Home() {
         </div>
       </div>
       <section className="discovery-grid">
-        {discoveryData.map((item) => (
-          <div key={item.id} className="discovery-item">
+        {discoveryData.map((item: any) => (
+          <div key={item._id.toString()} className="discovery-item">
             <div className="img-placeholder"></div>
             <h3>{item.brand}</h3>
             <p>{item.desc}</p>
@@ -122,13 +72,14 @@ export default function Home() {
       {/* 오늘의 판매자 특가 */}
       <div className="section-title">오늘의 판매자 특가</div>
       <section className="special-deals">
-        {specialDealsData.map((item) => (
-          <div key={item.id} className="product-card">
+        {specialDealsData.map((item: any) => (
+          <div key={item._id.toString()} className="product-card">
             <div className="img-placeholder"></div>
             <div className="badge">{item.badge}</div>
             <div className="product-title">{item.title}</div>
             <div className="price-info">
-              {item.price}원{item.discount && <span className="discount">{item.discount}원</span>}
+              {item.price.toLocaleString()}원
+              {item.discountPrice && <span className="discount">{item.discountPrice.toLocaleString()}원</span>}
             </div>
             <div className="rating">
               {item.rating} <span>({item.reviews})</span>
