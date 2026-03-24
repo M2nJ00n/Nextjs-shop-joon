@@ -1,79 +1,109 @@
-import Image from 'next/image'
+import React from 'react'
+import dbConnect from '@/db/dbConnect'
+import Product from '@/db/models/Product'
 
-export default function Home() {
+export default async function Home() {
+  await dbConnect()
+  
+  // Fetch products from database
+  const allProducts = await Product.find({}).lean()
+  
+  // Separate into categories for display
+  const discoveryData = allProducts.filter((p: any) => p.category === '발견')
+  const specialDealsData = allProducts.filter((p: any) => p.category === '특가')
+
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left">
-          <li className="mb-2">
-            Get started by editing{' '}
-            <code className="rounded bg-black/[.05] px-1 py-0.5 font-semibold dark:bg-white/[.06]">app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container">
+      {/* 상단 바 */}
+      <div className="top-bar">
+        <span>로그인</span>
+        <span>회원가입</span>
+        <span>고객센터</span>
+      </div>
 
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <a
-            className="flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent bg-foreground px-4 text-sm text-background transition-colors hover:bg-[#383838] sm:h-12 sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* 메인 헤더 */}
+      <header className="header-main">
+        <div className="logo">SHOPPING</div>
+
+        <div className="search-box">
+          <select aria-label="카테고리 선택">
+            <option>전체</option>
+            <option>식품</option>
+            <option>가전</option>
+          </select>
+          <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
+          <button>🔍</button>
         </div>
-      </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-6">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="https://nextjs.org/icons/file.svg" alt="File icon" width={16} height={16} />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="https://nextjs.org/icons/window.svg" alt="Window icon" width={16} height={16} />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="https://nextjs.org/icons/globe.svg" alt="Globe icon" width={16} height={16} />
-          Go to nextjs.org →
-        </a>
+
+        <div className="user-menu">
+          <div>마이페이지</div>
+          <div>장바구니</div>
+        </div>
+      </header>
+
+      {/* 카테고리 네비게이션 */}
+      <ul className="nav-categories">
+        <li className="active">✔ 베스트</li>
+        <li>특가/혜택</li>
+        <li>로켓배송</li>
+        <li>신선식품</li>
+        <li>가전/디지털</li>
+      </ul>
+
+      {/* 메인 배너 */}
+      <section className="hero-banner">[메인 프로모션 배너 이미지 영역]</section>
+
+      {/* 오늘의 발견 */}
+      <div className="section-title">
+        <div>
+          오늘의 발견 <span>| 오늘 쇼핑이 즐거운 가장 HOT한 상품!</span>
+        </div>
+      </div>
+      <section className="discovery-grid">
+        {discoveryData.map((item: any) => (
+          <div key={item._id.toString()} className="discovery-item">
+            <div className="img-placeholder"></div>
+            <h3>{item.brand}</h3>
+            <p>{item.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* 오늘의 판매자 특가 */}
+      <div className="section-title">오늘의 판매자 특가</div>
+      <section className="special-deals">
+        {specialDealsData.map((item: any) => (
+          <div key={item._id.toString()} className="product-card">
+            <div className="img-placeholder"></div>
+            <div className="badge">{item.badge}</div>
+            <div className="product-title">{item.title}</div>
+            <div className="price-info">
+              {item.price.toLocaleString()}원
+              {item.discountPrice && <span className="discount">{item.discountPrice.toLocaleString()}원</span>}
+            </div>
+            <div className="rating">
+              {item.rating} <span>({item.reviews})</span>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* 푸터 */}
+      <footer>
+        <ul className="footer-links">
+          <li>회사소개</li>
+          <li>이용약관</li>
+          <li>개인정보처리방침</li>
+          <li>청소년보호정책</li>
+          <li>입점상담</li>
+        </ul>
+        <p>
+          상호명: (주)쇼핑몰 | 대표이사: 홍길동 | 사업자등록번호: 123-45-67890
+          <br />
+          통신판매업신고: 제2026-충남아산-0000호 | 주소: 충청남도 아산시 쇼핑로 123
+          <br />
+          고객센터: 1588-0000 (평일 09:00~18:00)
+        </p>
       </footer>
     </div>
   )
