@@ -4,8 +4,6 @@ import { useState, Suspense } from 'react'
 import styled from 'styled-components'
 import SignUp from './Signup'
 import ForgetPassword from './ForgetPass'
-import { Gaitwise } from '@/public/svg'
-import Image from 'next/image'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
@@ -15,8 +13,6 @@ function AuthContent() {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('analyst')
-
   // Inside AuthContent:
   const router = useRouter()
 
@@ -25,7 +21,6 @@ function AuthContent() {
       redirect: false,
       username,
       password,
-      role,
     })
 
     if (res?.ok) {
@@ -40,32 +35,8 @@ function AuthContent() {
     <Container>
       {type === 'login' && (
         <LoginBox>
-          <Image src={Gaitwise} alt="logo" width={100} height={100} layout="responsive" />
-          <Title>Hi, Welcome Back!</Title>
-          <Subtitle>Please select a Type</Subtitle>
-
-          <RoleSelect>
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="analyst"
-                checked={role === 'analyst'}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              Analysts
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="doctor"
-                checked={role === 'doctor'}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              Doctor
-            </label>
-          </RoleSelect>
+          <Title>Welcome Back!</Title>
+          <Subtitle>Please verify your identity to continue.</Subtitle>
 
           <InputField
             type="email"
@@ -131,17 +102,6 @@ const Title = styled.h2`
 const Subtitle = styled.p`
   color: #666;
   margin-bottom: 1.5rem;
-`
-
-const RoleSelect = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-
-  label {
-    margin: 0 1rem;
-    font-size: 1rem;
-  }
 `
 
 const InputField = styled.input`

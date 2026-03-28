@@ -1,7 +1,5 @@
 'use client'
 
-import { Gaitwise } from '@/public/svg'
-import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -26,7 +24,6 @@ export default function ForgetPassword() {
 
   return (
     <ForgetPasswordBox>
-      <Image src={Gaitwise} alt="logo" width={100} height={100} layout="responsive" />
       <Title>비밀번호를 잊어버리셨나요?</Title>
       <Subtitle>이메일 주소를 입력해 주세요. 확인 코드를 보내드립니다.</Subtitle>
 

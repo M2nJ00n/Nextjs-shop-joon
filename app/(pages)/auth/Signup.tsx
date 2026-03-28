@@ -1,7 +1,5 @@
 'use client'
 
-import { Gaitwise } from '@/public/svg'
-import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
@@ -10,8 +8,6 @@ export default function SignUp() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('analyst')
-
   // Inside your component
   const router = useRouter()
 
@@ -21,9 +17,8 @@ export default function SignUp() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, password, role }),
+      body: JSON.stringify({ name, email, password }),
     })
-
     if (res.ok) {
       alert('회원가입이 완료되었습니다!')
       router.push('/auth?type=login')
@@ -34,32 +29,8 @@ export default function SignUp() {
 
   return (
     <SignUpBox>
-      <Image src={Gaitwise} alt="logo" width={100} height={100} layout="responsive" />
       <Title>Create Account</Title>
-      <Subtitle>Doctor must authenticate after Login</Subtitle>
-
-      <RoleSelect>
-        <label>
-          <input
-            type="radio"
-            name="role"
-            value="analyst"
-            checked={role === 'analyst'}
-            onChange={(e) => setRole(e.target.value)}
-          />
-          Analysts
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="role"
-            value="doctor"
-            checked={role === 'doctor'}
-            onChange={(e) => setRole(e.target.value)}
-          />
-          Doctor
-        </label>
-      </RoleSelect>
+      <Subtitle>Welcome to our Shopping Mall. Enjoy your shopping!</Subtitle>
 
       <InputField type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
       <InputField type="email" placeholder="Your Email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -96,17 +67,6 @@ const Title = styled.h2`
 const Subtitle = styled.p`
   color: #666;
   margin-bottom: 1.5rem;
-`
-
-const RoleSelect = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-
-  label {
-    margin: 0 1rem;
-    font-size: 1rem;
-  }
 `
 
 const InputField = styled.input`
