@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import dbConnect from '@/db/dbConnect'
 import Product from '@/db/models/Product'
 
@@ -16,8 +17,12 @@ export default async function Home() {
     <div className="container">
       {/* 상단 바 */}
       <div className="top-bar">
-        <span>로그인</span>
-        <span>회원가입</span>
+        <Link href="/auth?type=login" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span>로그인</span>
+        </Link>
+        <Link href="/auth?type=sign-up" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span>회원가입</span>
+        </Link>
         <span>고객센터</span>
       </div>
 
