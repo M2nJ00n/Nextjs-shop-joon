@@ -1,12 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import dbConnect from '@/db/dbConnect'
 import Product from '@/db/models/Product'
 
 export default async function Home() {
   await dbConnect()
-  
-  // Fetch products from database
+
   const allProducts = await Product.find({}).lean()
   
   // Separate into categories for display
@@ -29,7 +29,6 @@ export default async function Home() {
       {/* 메인 헤더 */}
       <header className="header-main">
         <div className="logo">SHOPPING</div>
-
         <div className="search-box">
           <select aria-label="카테고리 선택">
             <option>전체</option>
@@ -39,7 +38,6 @@ export default async function Home() {
           <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
           <button>🔍</button>
         </div>
-
         <div className="user-menu">
           <div>마이페이지</div>
           <div>장바구니</div>
@@ -59,7 +57,11 @@ export default async function Home() {
         {bestData.map((item: any) => (
           <Link key={item._id.toString()} href={`/products/${item._id.toString()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="discovery-item">
-              <div className="img-placeholder"></div>
+              {item.imageUrl ? (
+                <Image src={item.imageUrl} alt={item.title} width={160} height={160} style={{ objectFit: 'cover', borderRadius: '8px', width: '100%', height: '160px' }} />
+              ) : (
+                <div className="img-placeholder"></div>
+              )}
               <h3>{item.brand}</h3>
               <p>{item.desc}</p>
             </div>
@@ -77,7 +79,11 @@ export default async function Home() {
         {rocketData.map((item: any) => (
           <Link key={item._id.toString()} href={`/products/${item._id.toString()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="discovery-item">
-              <div className="img-placeholder"></div>
+              {item.imageUrl ? (
+                <Image src={item.imageUrl} alt={item.title} width={160} height={160} style={{ objectFit: 'cover', borderRadius: '8px', width: '100%', height: '160px' }} />
+              ) : (
+                <div className="img-placeholder"></div>
+              )}
               <h3>{item.brand}</h3>
               <p>{item.desc}</p>
             </div>
