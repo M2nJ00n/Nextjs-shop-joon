@@ -10,8 +10,8 @@ export default async function Home() {
   const allProducts = await Product.find({}).lean()
   
   // Separate into categories for display
-  const discoveryData = allProducts.filter((p: any) => p.category === '발견')
-  const specialDealsData = allProducts.filter((p: any) => p.category === '특가')
+  const bestData = allProducts.filter((p: any) => p.category === '베스트')
+  const rocketData = allProducts.filter((p: any) => p.category === '로켓배송')
 
   return (
     <div className="container">
@@ -46,50 +46,42 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* 카테고리 네비게이션 */}
-      <ul className="nav-categories">
-        <li className="active">✔ 베스트</li>
-        <li>특가/혜택</li>
-        <li>로켓배송</li>
-        <li>신선식품</li>
-        <li>가전/디지털</li>
-      </ul>
-
       {/* 메인 배너 */}
       <section className="hero-banner">[메인 프로모션 배너 이미지 영역]</section>
 
-      {/* 오늘의 발견 */}
+      {/* 베스트 */}
       <div className="section-title">
         <div>
-          오늘의 발견 <span>| 오늘 쇼핑이 즐거운 가장 HOT한 상품!</span>
+          베스트 <span>| 지금 가장 인기 있는 상품!</span>
         </div>
       </div>
       <section className="discovery-grid">
-        {discoveryData.map((item: any) => (
-          <div key={item._id.toString()} className="discovery-item">
-            <div className="img-placeholder"></div>
-            <h3>{item.brand}</h3>
-            <p>{item.desc}</p>
-          </div>
+        {bestData.map((item: any) => (
+          <Link key={item._id.toString()} href={`/products/${item._id.toString()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="discovery-item">
+              <div className="img-placeholder"></div>
+              <h3>{item.brand}</h3>
+              <p>{item.desc}</p>
+            </div>
+          </Link>
         ))}
       </section>
 
-      {/* 오늘의 판매자 특가 */}
-      <div className="section-title">오늘의 판매자 특가</div>
-      <section className="special-deals">
-        {specialDealsData.map((item: any) => (
-          <div key={item._id.toString()} className="product-card">
-            <div className="img-placeholder"></div>
-            <div className="badge">{item.badge}</div>
-            <div className="product-title">{item.title}</div>
-            <div className="price-info">
-              {item.price.toLocaleString()}원
-              {item.discountPrice && <span className="discount">{item.discountPrice.toLocaleString()}원</span>}
+      {/* 로켓배송 */}
+      <div className="section-title">
+        <div>
+          로켓배송 <span>| 빠르게 받아보세요!</span>
+        </div>
+      </div>
+      <section className="discovery-grid">
+        {rocketData.map((item: any) => (
+          <Link key={item._id.toString()} href={`/products/${item._id.toString()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="discovery-item">
+              <div className="img-placeholder"></div>
+              <h3>{item.brand}</h3>
+              <p>{item.desc}</p>
             </div>
-            <div className="rating">
-              {item.rating} <span>({item.reviews})</span>
-            </div>
-          </div>
+          </Link>
         ))}
       </section>
 
