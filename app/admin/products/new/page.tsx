@@ -83,6 +83,12 @@ export default function NewProductPage() {
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 shadow">
+        <button
+          onClick={() => router.back()}
+          className="mb-4 text-sm text-gray-500 hover:text-gray-800"
+        >
+          ← 뒤로가기
+        </button>
         <h1 className="mb-6 text-2xl font-bold">상품 등록</h1>
 
         {/* 이미지 업로드 */}

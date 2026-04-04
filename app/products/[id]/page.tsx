@@ -45,66 +45,66 @@ export default async function ProductPage({ params }: { params: { id: string } }
       </header>
 
       {/* 상품 상세 */}
-      <div style={{ maxWidth: '900px', margin: '40px auto', padding: '0 16px' }}>
+      <div className="mx-auto my-8 md:my-10 max-w-4xl">
         {/* 뒤로가기 */}
-        <Link href="/" style={{ fontSize: '14px', color: '#666', textDecoration: 'none', display: 'inline-block', marginBottom: '24px' }}>
+        <Link href="/" className="mb-6 inline-block text-sm text-gray-500 hover:text-gray-800 no-underline">
           ← 목록으로
         </Link>
 
-        <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
+        <div className="flex flex-col md:flex-row gap-8 md:gap-10">
           {/* 이미지 */}
-          <div style={{ flex: '0 0 360px', background: '#f5f5f5', borderRadius: '12px', overflow: 'hidden', minHeight: '360px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="w-full md:w-[360px] md:flex-shrink-0 bg-gray-100 rounded-xl overflow-hidden min-h-[240px] md:min-h-[360px] flex items-center justify-center">
             {product.imageUrl ? (
               <Image
                 src={product.imageUrl}
                 alt={product.title}
                 width={360}
                 height={360}
-                style={{ objectFit: 'cover', width: '100%', height: '360px' }}
+                className="w-full object-cover h-[240px] md:h-[360px]"
               />
             ) : (
-              <span style={{ color: '#aaa', fontSize: '14px' }}>이미지 없음</span>
+              <span className="text-gray-400 text-sm">이미지 없음</span>
             )}
           </div>
 
           {/* 정보 */}
-          <div style={{ flex: '1', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="flex-1 flex flex-col gap-4">
             {product.badge && (
-              <span style={{ display: 'inline-block', background: '#111', color: '#fff', fontSize: '12px', padding: '4px 10px', borderRadius: '4px', width: 'fit-content' }}>
+              <span className="inline-block bg-gray-900 text-white text-xs px-3 py-1 rounded w-fit">
                 {product.badge}
               </span>
             )}
             {product.brand && (
-              <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>{product.brand}</p>
+              <p className="text-gray-400 text-sm m-0">{product.brand}</p>
             )}
-            <h1 style={{ fontSize: '22px', fontWeight: '700', margin: 0, lineHeight: '1.4' }}>{product.title}</h1>
+            <h1 className="text-xl md:text-2xl font-bold m-0 leading-snug">{product.title}</h1>
             {product.desc && (
-              <p style={{ color: '#555', fontSize: '15px', margin: 0 }}>{product.desc}</p>
+              <p className="text-gray-600 text-sm md:text-base m-0">{product.desc}</p>
             )}
 
             {/* 가격 */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="flex items-center gap-3">
               {product.discountPrice ? (
                 <>
-                  <span style={{ fontSize: '24px', fontWeight: '700' }}>{product.discountPrice.toLocaleString()}원</span>
-                  <span style={{ fontSize: '16px', color: '#aaa', textDecoration: 'line-through' }}>{product.price.toLocaleString()}원</span>
+                  <span className="text-2xl font-bold">{product.discountPrice.toLocaleString()}원</span>
+                  <span className="text-base text-gray-400 line-through">{product.price.toLocaleString()}원</span>
                 </>
               ) : (
-                <span style={{ fontSize: '24px', fontWeight: '700' }}>{product.price.toLocaleString()}원</span>
+                <span className="text-2xl font-bold">{product.price.toLocaleString()}원</span>
               )}
             </div>
 
             {/* 평점 */}
-            <p style={{ color: '#f5a623', fontSize: '15px', margin: 0 }}>
-              {product.rating} <span style={{ color: '#888', fontSize: '13px' }}>({product.reviews}개 리뷰)</span>
+            <p className="text-yellow-500 text-sm m-0">
+              {product.rating} <span className="text-gray-400 text-xs">({product.reviews}개 리뷰)</span>
             </p>
 
             {/* 버튼 */}
-            <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-              <button style={{ flex: 1, padding: '14px', background: '#111', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '600', cursor: 'pointer' }}>
+            <div className="flex gap-3 mt-2">
+              <button className="flex-1 py-3 bg-gray-900 text-white rounded-lg text-sm md:text-base font-semibold cursor-pointer border-none">
                 장바구니 담기
               </button>
-              <button style={{ flex: 1, padding: '14px', background: '#f5a623', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '600', cursor: 'pointer' }}>
+              <button className="flex-1 py-3 bg-yellow-400 text-white rounded-lg text-sm md:text-base font-semibold cursor-pointer border-none">
                 바로 구매
               </button>
             </div>
