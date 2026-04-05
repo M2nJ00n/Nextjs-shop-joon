@@ -12,6 +12,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 16px;
 }
 
 .top-bar {
@@ -232,6 +233,75 @@ footer {
 
 footer p {
   line-height: 1.8;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .discovery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .header-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 0;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .user-menu {
+    font-size: 13px;
+    gap: 12px;
+  }
+
+  .hero-banner {
+    height: 160px;
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .discovery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .discovery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-banner {
+    height: 120px;
+    font-size: 14px;
+  }
 }
 
 @layer base {

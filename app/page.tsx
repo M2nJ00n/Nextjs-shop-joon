@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dbConnect from '@/db/dbConnect'
 import Product from '@/db/models/Product'
+import TopBar from './components/TopBar'
 
 export default async function Home() {
   await dbConnect()
@@ -16,15 +17,7 @@ export default async function Home() {
   return (
     <div className="container">
       {/* 상단 바 */}
-      <div className="top-bar">
-        <Link href="/auth?type=login" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span>로그인</span>
-        </Link>
-        <Link href="/auth?type=sign-up" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span>회원가입</span>
-        </Link>
-        <span>고객센터</span>
-      </div>
+      <TopBar />
 
       {/* 메인 헤더 */}
       <header className="header-main">
@@ -40,6 +33,9 @@ export default async function Home() {
         </div>
         <div className="user-menu">
           <div>마이페이지</div>
+          <Link href="/admin/products/new" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div>상품 등록</div>
+          </Link>
           <div>장바구니</div>
         </div>
       </header>
