@@ -34,6 +34,7 @@ export default function LoginForm() {
 
     if (res?.ok) {
       toast.success('로그인 성공! 환영합니다 😊')
+      router.refresh()
       router.push('/')
     } else {
       toast.error('이메일이나 비밀번호를 확인해주세요.')
