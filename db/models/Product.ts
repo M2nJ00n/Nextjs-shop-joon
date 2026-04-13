@@ -10,7 +10,8 @@ const productSchema = new Schema(
     badge: { type: String, required: false }, // e.g., '무료배송', '특가'
     rating: { type: String, default: '★★★★★' },
     reviews: { type: Number, default: 0 },
-    imageUrl: { type: String, required: false }, 
+    imageUrl: { type: String, required: false },
+    detailImages: { type: [String], default: [] }, // 상세 페이지 추가 이미지
     stock: { type: Number, default: 100 }, // inventory
     category: { type: String, required: false, default: '베스트' }, // classification
   },
