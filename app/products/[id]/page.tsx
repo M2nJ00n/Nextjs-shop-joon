@@ -3,6 +3,7 @@ import Product from '@/db/models/Product'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import AddToCartButton from '@/app/components/AddToCartButton'
 import TopBar from '@/app/components/TopBar'
 
 // ── 상품별 장점 콘텐츠 (이미지는 DB의 detailImages 사용) ────────────
@@ -234,20 +235,16 @@ export default async function ProductPage({ params }: { params: { id: string } }
             )}
 
             {/* 구매 버튼 */}
-            <div className="flex gap-3 mt-3">
-              <button
-                disabled={isSoldOut}
-                className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold border-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                장바구니 담기
-              </button>
-              <button
-                disabled={isSoldOut}
-                className="flex-1 py-3 bg-yellow-400 text-gray-900 rounded-xl text-sm font-semibold border-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {isSoldOut ? '품절' : '바로 구매'}
-              </button>
-            </div>
+            <AddToCartButton
+              product={{
+                id: product._id.toString(),
+                title: product.title,
+                price: product.price,
+                discountPrice: product.discountPrice,
+                imageUrl: product.imageUrl,
+              }}
+              isSoldOut={product.stock === 0}
+            />
           </div>
         </div>
 

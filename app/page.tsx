@@ -36,7 +36,9 @@ export default async function Home() {
           <Link href="/admin/products/new" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div>상품 등록</div>
           </Link>
-          <div>장바구니</div>
+          <Link href="/cart" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div>장바구니</div>
+          </Link>
         </div>
       </header>
 
