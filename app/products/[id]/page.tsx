@@ -3,6 +3,7 @@ import Product from '@/db/models/Product'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import AddToCartButton from '@/app/components/AddToCartButton'
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   await dbConnect()
@@ -99,15 +100,17 @@ export default async function ProductPage({ params }: { params: { id: string } }
               {product.rating} <span className="text-gray-400 text-xs">({product.reviews}개 리뷰)</span>
             </p>
 
-            {/* 버튼 */}
-            <div className="flex gap-3 mt-2">
-              <button className="flex-1 py-3 bg-gray-900 text-white rounded-lg text-sm md:text-base font-semibold cursor-pointer border-none">
-                장바구니 담기
-              </button>
-              <button className="flex-1 py-3 bg-yellow-400 text-white rounded-lg text-sm md:text-base font-semibold cursor-pointer border-none">
-                바로 구매
-              </button>
-            </div>
+            {/* 구매 버튼 */}
+            <AddToCartButton
+              product={{
+                id: product._id.toString(),
+                title: product.title,
+                price: product.price,
+                discountPrice: product.discountPrice,
+                imageUrl: product.imageUrl,
+              }}
+              isSoldOut={product.stock === 0}
+            />
           </div>
         </div>
       </div>
