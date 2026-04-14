@@ -2,6 +2,7 @@
 
 import { useCart } from '@/app/components/CartContext'
 import TopBar from '@/app/components/TopBar'
+import Header from '@/app/components/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -18,24 +19,7 @@ export default function CartPage() {
     <div className="container">
       <TopBar />
 
-      <header className="header-main">
-        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="logo">SHOPPING</div>
-        </Link>
-        <div className="search-box">
-          <select aria-label="카테고리 선택">
-            <option>전체</option>
-            <option>식품</option>
-            <option>가전</option>
-          </select>
-          <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
-          <button>🔍</button>
-        </div>
-        <div className="user-menu">
-          <div>마이페이지</div>
-          <div>장바구니</div>
-        </div>
-      </header>
+      <Header />
 
       <div className="mx-auto my-8 max-w-4xl px-4">
         <h1 className="text-2xl font-bold mb-6">장바구니</h1>

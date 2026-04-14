@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useCart } from '@/app/components/CartContext'
 import TopBar from '@/app/components/TopBar'
+import Header from '@/app/components/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -228,9 +229,10 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('')
   const [payMethod, setPayMethod] = useState<PayMethod>('card')
   const [modal, setModal] = useState<null | PayMethod>(null)
+  const isPaid = useRef(false)
 
   useEffect(() => {
-    if (items.length === 0) router.replace('/cart')
+    if (!isPaid.current && items.length === 0) router.replace('/cart')
   }, [items, router])
 
   // 금액 계산
@@ -277,6 +279,7 @@ export default function CheckoutPage() {
       payMethod,
     }
     sessionStorage.setItem('lastOrder', JSON.stringify(orderData))
+    isPaid.current = true
     clear()
     router.push('/checkout/complete')
   }
@@ -289,17 +292,7 @@ export default function CheckoutPage() {
   return (
     <div className="container">
       <TopBar />
-      <header className="header-main">
-        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="logo">SHOPPING</div>
-        </Link>
-        <div className="search-box">
-          <select aria-label="카테고리 선택"><option>전체</option><option>식품</option><option>가전</option></select>
-          <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
-          <button>🔍</button>
-        </div>
-        <div className="user-menu"><div>마이페이지</div><div>장바구니</div></div>
-      </header>
+      <Header />
 
       <div className="mx-auto my-8 max-w-5xl px-4">
         <h1 className="text-2xl font-bold mb-6">주문/결제</h1>

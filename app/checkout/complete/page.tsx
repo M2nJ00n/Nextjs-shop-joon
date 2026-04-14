@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import TopBar from '@/app/components/TopBar'
+import Header from '@/app/components/Header'
 import Link from 'next/link'
 
 interface OrderData {
@@ -42,17 +43,7 @@ export default function CompletePage() {
     <div className="container">
       <TopBar />
 
-      <header className="header-main">
-        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="logo">SHOPPING</div>
-        </Link>
-        <div className="search-box">
-          <select aria-label="카테고리 선택"><option>전체</option><option>식품</option><option>가전</option></select>
-          <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
-          <button>🔍</button>
-        </div>
-        <div className="user-menu"><div>마이페이지</div><div>장바구니</div></div>
-      </header>
+      <Header />
 
       <div className="mx-auto my-10 max-w-lg px-4">
 
