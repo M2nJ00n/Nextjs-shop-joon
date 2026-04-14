@@ -21,7 +21,9 @@ export default function Header() {
         <button>🔍</button>
       </div>
       <div className="user-menu">
-        <div>마이페이지</div>
+        <Link href="/mypage" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div>마이페이지</div>
+        </Link>
         <Link href="/admin/products/new" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div>상품 등록</div>
         </Link>
