@@ -7,6 +7,7 @@ import Header from '@/app/components/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 // ── 쿠폰 ──────────────────────────────────────────────────────────────
 const COUPONS: Record<string, { type: 'percent' | 'fixed'; value: number; label: string }> = {
@@ -218,6 +219,13 @@ function NaverPayModal({ amount, onClose, onPay }: { amount: number; onClose: ()
 export default function CheckoutPage() {
   const { items, clear } = useCart()
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/auth?type=login')
+    }
+  }, [status, router])
 
   const [form, setForm] = useState({
     name: '', phone: '', zip: '', address: '', detail: '',
@@ -234,6 +242,10 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!isPaid.current && items.length === 0) router.replace('/cart')
   }, [items, router])
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    return <div className="flex min-h-screen items-center justify-center text-gray-400">확인 중...</div>
+  }
 
   // 금액 계산
   const subtotal = items.reduce((s, i) => s + (i.discountPrice ?? i.price) * i.quantity, 0)

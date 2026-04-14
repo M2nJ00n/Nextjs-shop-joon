@@ -41,8 +41,20 @@ export default async function Home() {
               ) : (
                 <div className="img-placeholder"></div>
               )}
-              <h3>{item.brand}</h3>
+              <h3>{item.brand || item.title}</h3>
               <p>{item.desc}</p>
+              <p style={{ margin: '4px 0 0', fontWeight: 700, fontSize: '14px' }}>
+                {item.discountPrice ? (
+                  <>
+                    <span style={{ color: '#ef4444', marginRight: '4px' }}>
+                      {Math.round((1 - item.discountPrice / item.price) * 100)}%
+                    </span>
+                    {item.discountPrice.toLocaleString()}원
+                  </>
+                ) : (
+                  `${item.price.toLocaleString()}원`
+                )}
+              </p>
             </div>
           </Link>
         ))}
@@ -63,8 +75,20 @@ export default async function Home() {
               ) : (
                 <div className="img-placeholder"></div>
               )}
-              <h3>{item.brand}</h3>
+              <h3>{item.brand || item.title}</h3>
               <p>{item.desc}</p>
+              <p style={{ margin: '4px 0 0', fontWeight: 700, fontSize: '14px' }}>
+                {item.discountPrice ? (
+                  <>
+                    <span style={{ color: '#ef4444', marginRight: '4px' }}>
+                      {Math.round((1 - item.discountPrice / item.price) * 100)}%
+                    </span>
+                    {item.discountPrice.toLocaleString()}원
+                  </>
+                ) : (
+                  `${item.price.toLocaleString()}원`
+                )}
+              </p>
             </div>
           </Link>
         ))}

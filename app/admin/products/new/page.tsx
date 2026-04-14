@@ -1,11 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 
 export default function NewProductPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      toast.error('로그인이 필요합니다.')
+      router.replace('/auth?type=login')
+    }
+  }, [status, router])
+
+  if (status === 'loading' || !session) {
+    return <div className="flex min-h-screen items-center justify-center text-gray-400">확인 중...</div>
+  }
   const [loading, setLoading] = useState(false)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>('')
@@ -36,24 +49,36 @@ export default function NewProductPage() {
   // 제출
   const handleSubmit = async () => {
     if (!form.title || !form.price) {
-      toast.error('상품명과 가격은 필수입니다.')
+      toast.error('상품명과 정가는 필수입니다.')
+      return
+    }
+    if (form.discountPrice && Number(form.discountPrice) >= Number(form.price)) {
+      toast.error('판매가는 정가보다 낮아야 합니다.')
       return
     }
 
     setLoading(true)
 
     try {
-      // 1. 이미지 업로드
+      // 1. 이미지 업로드 (실패해도 상품 등록 계속 진행)
       let imageUrl = ''
       if (imageFile) {
-        const formData = new FormData()
-        formData.append('file', imageFile)
-        const uploadRes = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        })
-        const uploadData = await uploadRes.json()
-        imageUrl = uploadData.url
+        try {
+          const formData = new FormData()
+          formData.append('file', imageFile)
+          const uploadRes = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          })
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json()
+            imageUrl = uploadData.url ?? ''
+          } else {
+            toast.warning('이미지 업로드에 실패했습니다. 이미지 없이 등록합니다.')
+          }
+        } catch {
+          toast.warning('이미지 업로드에 실패했습니다. 이미지 없이 등록합니다.')
+        }
       }
 
       // 2. 상품 저장
@@ -69,12 +94,15 @@ export default function NewProductPage() {
         }),
       })
 
-      if (!res.ok) throw new Error()
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || '상품 등록에 실패했습니다.')
+      }
 
       toast.success('상품이 등록되었습니다!')
       router.push('/')
-    } catch {
-      toast.error('상품 등록에 실패했습니다.')
+    } catch (err: any) {
+      toast.error(err.message || '상품 등록에 실패했습니다.')
     } finally {
       setLoading(false)
     }
@@ -144,25 +172,25 @@ export default function NewProductPage() {
         {/* 가격 */}
         <div className="mb-4 flex gap-4">
           <div className="flex-1">
-            <label className="mb-1 block text-sm font-medium">판매가 (원) *</label>
+            <label className="mb-1 block text-sm font-medium">정가 (원) *</label>
             <input
               name="price"
               type="number"
               value={form.price}
               onChange={handleChange}
               className="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="10000"
+              placeholder="15000"
             />
           </div>
           <div className="flex-1">
-            <label className="mb-1 block text-sm font-medium">정가 (원)</label>
+            <label className="mb-1 block text-sm font-medium">판매가/할인가 (원)</label>
             <input
               name="discountPrice"
               type="number"
               value={form.discountPrice}
               onChange={handleChange}
               className="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="15000"
+              placeholder="10000"
             />
           </div>
         </div>
@@ -178,8 +206,7 @@ export default function NewProductPage() {
               className="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option>베스트</option>
-              <option>발견</option>
-              <option>특가</option>
+              <option>로켓배송</option>
             </select>
           </div>
           <div className="flex-1">
