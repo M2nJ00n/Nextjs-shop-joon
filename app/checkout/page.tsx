@@ -281,16 +281,38 @@ export default function CheckoutPage() {
     setModal(payMethod)
   }
 
-  const handlePayComplete = () => {
+  const handlePayComplete = async () => {
     const orderNumber = generateOrderNumber()
+    const orderItems = items.map(i => ({ title: i.title, quantity: i.quantity, price: i.discountPrice ?? i.price }))
     const orderData = {
       orderNumber,
       total,
-      items: items.map(i => ({ title: i.title, quantity: i.quantity, price: i.discountPrice ?? i.price })),
+      items: orderItems,
       address: `${form.address} ${form.detail}`,
       payMethod,
     }
     sessionStorage.setItem('lastOrder', JSON.stringify(orderData))
+
+    // DB에 주문 저장 (실패해도 완료 페이지는 이동)
+    try {
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderNumber,
+          items: orderItems,
+          subtotal,
+          shipping,
+          discount: couponDiscount,
+          total,
+          address: `${form.address} ${form.detail}`,
+          payMethod,
+        }),
+      })
+    } catch {
+      // 네트워크 오류 시에도 완료 페이지로 이동
+    }
+
     isPaid.current = true
     clear()
     router.push('/checkout/complete')
