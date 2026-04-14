@@ -4,6 +4,7 @@ import Image from 'next/image'
 import dbConnect from '@/db/dbConnect'
 import Product from '@/db/models/Product'
 import TopBar from './components/TopBar'
+import Header from './components/Header'
 
 export default async function Home() {
   await dbConnect()
@@ -20,27 +21,7 @@ export default async function Home() {
       <TopBar />
 
       {/* 메인 헤더 */}
-      <header className="header-main">
-        <div className="logo">SHOPPING</div>
-        <div className="search-box">
-          <select aria-label="카테고리 선택">
-            <option>전체</option>
-            <option>식품</option>
-            <option>가전</option>
-          </select>
-          <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
-          <button>🔍</button>
-        </div>
-        <div className="user-menu">
-          <div>마이페이지</div>
-          <Link href="/admin/products/new" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div>상품 등록</div>
-          </Link>
-          <Link href="/cart" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div>장바구니</div>
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* 메인 배너 */}
       <section className="hero-banner">[메인 프로모션 배너 이미지 영역]</section>
