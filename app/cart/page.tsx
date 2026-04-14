@@ -6,10 +6,12 @@ import Header from '@/app/components/Header'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function CartPage() {
   const { items, remove, updateQty } = useCart()
   const router = useRouter()
+  const { data: session } = useSession()
 
   const subtotal = items.reduce((sum, i) => sum + (i.discountPrice ?? i.price) * i.quantity, 0)
   const shipping = subtotal >= 30000 || subtotal === 0 ? 0 : 3000
@@ -97,10 +99,16 @@ export default function CartPage() {
                   <span className="text-lg">{total.toLocaleString()}원</span>
                 </div>
                 <button
-                  onClick={() => router.push('/checkout')}
+                  onClick={() => {
+                    if (!session) {
+                      router.push('/auth?type=login')
+                      return
+                    }
+                    router.push('/checkout')
+                  }}
                   className="w-full mt-4 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold border-none cursor-pointer"
                 >
-                  주문하기 ({items.reduce((s, i) => s + i.quantity, 0)}개)
+                  {session ? `주문하기 (${items.reduce((s, i) => s + i.quantity, 0)}개)` : '로그인 후 주문하기'}
                 </button>
                 <Link href="/" className="block text-center mt-3 text-sm text-gray-400 hover:text-gray-600 no-underline">
                   쇼핑 계속하기

@@ -13,7 +13,7 @@ const productSchema = new Schema(
     imageUrl: { type: String, required: false },
     detailImages: { type: [String], default: [] }, // 상세 페이지 추가 이미지
     stock: { type: Number, default: 100 }, // inventory
-    category: { type: String, required: false, default: '베스트' }, // classification
+    category: { type: String, required: false, enum: ['베스트', '로켓배송'], default: '베스트' }, // classification
   },
   { timestamps: true }
 )

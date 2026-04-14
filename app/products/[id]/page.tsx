@@ -323,8 +323,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
   const detail = getDetail(product.title)
   const isSoldOut = product.stock === 0
 
-  const discountRate =
-    product.discountPrice && product.price ? Math.round((1 - product.discountPrice / product.price) * 100) : null
+  // 두 필드 중 큰 값이 정가, 작은 값이 판매가 (기존 역전 데이터도 자동 처리)
+  const hasDiscount = product.discountPrice && product.discountPrice !== product.price
+  const originalPrice = hasDiscount ? Math.max(product.price, product.discountPrice) : product.price
+  const salePrice = hasDiscount ? Math.min(product.price, product.discountPrice) : null
+  const discountRate = hasDiscount ? Math.round((1 - salePrice! / originalPrice) * 100) : null
 
   return (
     <div className="container">
@@ -388,11 +391,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
             {/* 가격 + 할인율 */}
             <div className="mt-1 flex items-end gap-3">
-              {product.discountPrice ? (
+              {hasDiscount ? (
                 <>
-                  {discountRate !== null && <span className="text-xl font-bold text-red-500">{discountRate}%</span>}
-                  <span className="text-2xl font-bold">{product.discountPrice.toLocaleString()}원</span>
-                  <span className="text-base text-gray-400 line-through">{product.price.toLocaleString()}원</span>
+                  <span className="text-xl font-bold text-red-500">-{discountRate}%</span>
+                  <span className="text-2xl font-bold">{salePrice!.toLocaleString()}원</span>
+                  <span className="text-base text-gray-400 line-through">{originalPrice.toLocaleString()}원</span>
                 </>
               ) : (
                 <span className="text-2xl font-bold">{product.price.toLocaleString()}원</span>
@@ -409,8 +412,8 @@ export default async function ProductPage({ params }: { params: { id: string } }
               product={{
                 id: product._id.toString(),
                 title: product.title,
-                price: product.price,
-                discountPrice: product.discountPrice,
+                price: originalPrice,
+                discountPrice: salePrice ?? undefined,
                 imageUrl: product.imageUrl,
               }}
               isSoldOut={product.stock === 0}
