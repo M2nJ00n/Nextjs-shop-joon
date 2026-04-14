@@ -2,9 +2,19 @@
 
 import Link from 'next/link'
 import { useCart } from './CartContext'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const { totalCount } = useCart()
+  const router = useRouter()
+  const [query, setQuery] = useState('')
+
+  const handleSearch = () => {
+    const q = query.trim()
+    if (!q) return
+    router.push(`/search?q=${encodeURIComponent(q)}`)
+  }
 
   return (
     <header className="header-main">
@@ -17,8 +27,14 @@ export default function Header() {
           <option>식품</option>
           <option>가전</option>
         </select>
-        <input type="text" placeholder="찾고 싶은 상품을 검색해보세요!" />
-        <button>🔍</button>
+        <input
+          type="text"
+          placeholder="찾고 싶은 상품을 검색해보세요!"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSearch()}
+        />
+        <button onClick={handleSearch}>🔍</button>
       </div>
       <div className="user-menu">
         <Link href="/mypage" style={{ textDecoration: 'none', color: 'inherit' }}>
